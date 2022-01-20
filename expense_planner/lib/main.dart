@@ -115,7 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             icon: const Icon(Icons.add),
           ),
-          const Icon(Icons.ac_unit),
         ],
       ),
       body: Column(
