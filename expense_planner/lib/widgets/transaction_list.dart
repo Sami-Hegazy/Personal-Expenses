@@ -1,6 +1,6 @@
 import 'package:expense_planner/models/transaction.dart';
+import 'package:expense_planner/widgets/transaction_item.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transaction;
@@ -27,100 +27,16 @@ class TransactionList extends StatelessWidget {
               ],
             );
           })
-        : ListView.builder(
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 6,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 8,
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FittedBox(
-                        child: Text('\$${transaction[index].amount}'),
-                      ),
-                    ),
+        : ListView(
+            children: transaction
+                .map(
+                  (tx) => TransactionItem(
+                    key: ValueKey(tx.id),
+                    transaction: tx,
+                    deleteTx: deleteTx,
                   ),
-                  title: Text(
-                    transaction[index].title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(transaction[index].date),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 460
-                      ? TextButton.icon(
-                          icon: const Icon(Icons.delete),
-                          label: const Text('Delete'),
-                          onPressed: () {
-                            deleteTx(transaction[index].id);
-                          },
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            deleteTx(transaction[index].id);
-                          },
-                          icon: const Icon(Icons.delete),
-                          color: Theme.of(context).errorColor,
-                        ),
-                ),
-              );
-            },
-            itemCount: transaction.length,
+                )
+                .toList(),
           );
   }
 }
-
-
-// Card(
-//                   child: Row(
-//                     children: [
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           border: Border.all(color: Colors.purple, width: 2),
-//                         ),
-//                         margin: const EdgeInsets.symmetric(
-//                           vertical: 10,
-//                           horizontal: 15,
-//                         ),
-//                         padding: const EdgeInsets.all(10),
-//                         child: Text(
-//                           '\$ ${transaction[index].amount.toStringAsFixed(2)}',
-//                           style: TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontSize: 20,
-//                             color: Theme.of(context).primaryColor,
-//                           ),
-//                         ),
-//                       ),
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             transaction[index].title,
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                               fontSize: 16,
-//                             ),
-//                           ),
-//                           Text(
-//                             DateFormat.yMMMd().format(transaction[index].date),
-                            // style: const TextStyle(
-                            //   color: Colors.grey,
-                            // ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 );

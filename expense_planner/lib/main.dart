@@ -156,40 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: [
           if (isLandScape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Show Chart',
-                ),
-                Switch.adaptive(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    }),
-              ],
-            ),
+            ..._buildLandScapeContent(myMediaQuery, appBar, txListWidget),
           if (!isLandScape)
-            SizedBox(
-              height: (myMediaQuery.size.height -
-                      appBar.preferredSize.height -
-                      myMediaQuery.padding.top) *
-                  0.3,
-              child: Chart(_recentTransaction),
-            ),
-          if (!isLandScape) txListWidget,
-          if (isLandScape)
-            _showChart
-                ? SizedBox(
-                    height: (myMediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            myMediaQuery.padding.top) *
-                        0.7,
-                    child: Chart(_recentTransaction),
-                  )
-                : txListWidget
+            ..._buildPortraitContent(myMediaQuery, appBar, txListWidget),
         ],
       ),
     ));
@@ -215,5 +184,55 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 : Container(),
           );
+  }
+
+  List<Widget> _buildPortraitContent(
+    MediaQueryData myMediaQuery,
+    appBar,
+    Widget txListWidget,
+  ) {
+    return [
+      SizedBox(
+        height: (myMediaQuery.size.height -
+                appBar.preferredSize.height -
+                myMediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransaction),
+      ),
+      txListWidget,
+    ];
+  }
+
+  List<Widget> _buildLandScapeContent(
+    MediaQueryData myMediaQuery,
+    appBar,
+    Widget txListWidget,
+  ) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Show Chart',
+          ),
+          Switch.adaptive(
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              }),
+        ],
+      ),
+      _showChart
+          ? SizedBox(
+              height: (myMediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      myMediaQuery.padding.top) *
+                  0.7,
+              child: Chart(_recentTransaction),
+            )
+          : txListWidget
+    ];
   }
 }
